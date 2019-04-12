@@ -51,14 +51,17 @@ class ebo(object):
     def run(self):
         x_range, T, B, dim_limit, min_leaf_size, max_n_leaves, n_bo, n_top = self.get_params()
         tstart = self.X.shape[0] / B
-        for t in xrange(tstart, T):
+        for t in range(tstart, T):
+            import pdb; pdb.set_trace()
+
+
             # search space partition
             ref = self.y.min() if self.y.shape[0] > 0 else None
             self.tree = MondrianTree(self.X, self.y, x_range, max_n_leaves, reference=ref)
             leaves = self.tree.grow_tree(min_leaf_size)
             tot_eval = np.ceil(2.0 * B)
 
-            # this might be dangerous if high dimension and R>1
+            # this might be dangerous if high dimension and R > 1
             tot_volumn = np.array([n.volumn for n in leaves]).sum()
             parameters = [[0, n.X, n.y, n.x_range, False,
                            np.maximum(n_bo, np.ceil((tot_eval * n.volumn / tot_volumn)).astype(int)), self.options] for
@@ -99,8 +102,7 @@ class ebo(object):
         self.pause()
 
     def choose_newX(self, newX, newacf, n_top, B):
-        print
-        'start choosing newX'
+        print('start choosing newX')
         start = time.time()
         inds = newacf.argsort()
         if 'heuristic' in self.options and self.options['heuristic']:
@@ -143,8 +145,7 @@ class ebo(object):
             all_candidates = all_candidates[all_candidates != jbest]
             next_ind += 1
             rec.append(marginal)
-        print
-        'finished choosing newX, eplased time = ', time.time() - start
+        print('finished choosing newX, eplased time = ', time.time() - start)
 
         return newX[good_inds]
 
@@ -163,10 +164,8 @@ class ebo(object):
         if self.options['isplot']:
             plot_ebo(self.tree, newX, t)
         _, besty, cur = self.get_best()
-        print
-        't=', t, ', bestid=', cur, ', besty=', besty
-        print
-        'final z=', self.z, ' final k=', self.k
+        print('t=', t, ', bestid=', cur, ', besty=', besty)
+        print('final z=', self.z, ' final k=', self.k)
 
     def reload(self):
         fnm = self.options['save_file_name']
@@ -191,8 +190,7 @@ class ebo(object):
         if not os.path.exists(dirnm):
             os.makedirs(dirnm)
         pickle.dump([self.X, self.y, self.z, self.k, self.timing], open(fnm, 'wb'))
-        print
-        'saving file... ', time.time() - start, ' seconds'
+        print('saving file... ', time.time() - start, ' seconds')
 
 
 def check_valid_options(options):

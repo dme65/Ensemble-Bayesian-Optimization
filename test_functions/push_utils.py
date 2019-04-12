@@ -141,9 +141,8 @@ class end_effector:
                 list(self.hand.linearVelocity) + [self.hand.angularVelocity]
         if verbose:
             print_state = ["%.3f" % x for x in state]
-            print
-            "position, velocity: (%s), (%s) " % \
-            ((", ").join(print_state[:3]), (", ").join(print_state[3:]))
+            print("position, velocity: (%s), (%s) " % \
+            ((", ").join(print_state[:3]), (", ").join(print_state[3:])))
 
         return state
 

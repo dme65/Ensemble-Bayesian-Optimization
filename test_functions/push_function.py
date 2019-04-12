@@ -22,10 +22,11 @@ class PushReward:
         # maximum value of this function
         return np.linalg.norm(np.array(self.gxy) - np.array(self.sxy)) \
             + np.linalg.norm(np.array(self.gxy2) - np.array(self.sxy2))
+
     @property
     def dx(self):
         # dimension of the input
-        return self._dx
+        return len(self.xmin)
     
     def __call__(self, argv):
         # returns the reward of pushing two objects with two robots
@@ -61,6 +62,7 @@ class PushReward:
 
         ret1 = np.linalg.norm(np.array(self.gxy) - ret1)
         ret2 = np.linalg.norm(np.array(self.gxy2) - ret2)
+        print(initial_dist - ret1 - ret2 )
         return initial_dist - ret1 - ret2 
 
 
